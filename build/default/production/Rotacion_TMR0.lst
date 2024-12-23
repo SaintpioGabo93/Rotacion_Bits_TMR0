@@ -1,4 +1,4 @@
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  1
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:42:54         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -24,64 +24,68 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00007 ; Variables
                       00008     cblock 0x20
   00000020            00009         conta       ; Contador de LEDs
-  00000021            00010         temp1
-                      00011     endc
-                      00012     
-                      00013 ; Inicio de programa
-                      00014     org         0x00        ; iniciamos el programa en la dirección cero
-0000   1683           00015     bsf         STATUS, 5   ; Vamos al banco 1
+                      00010     endc
+                      00011     
+                      00012 ; Inicio de programa
+                      00013     org         0x00        ; iniciamos el programa en la dirección cero
+0000   1683           00014     bsf         STATUS, 5   ; Vamos al banco 1
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0001   0186           00016     clrf        TRISB       ; Configuramos PORTB como salida
-0002   3007           00017     movlw       b'00000111' ; Configuramos OPTION_REG para prescaler 1:256
+0001   0186           00015     clrf        TRISB       ; Configuramos PORTB como salida
+0002   3007           00016     movlw       b'00000111' ; Configuramos OPTION_REG para prescaler 1:256
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0003   0081           00018     movwf       OPTION_REG  ; Guardamos la configuracion en TMR0
-0004   1283           00019     bcf         STATUS, 5   ; Regresamos al banco 0
-                      00020  
-                      00021 ; Creamos la rutina de inicio de los LEDs
-0005                  00022 inicio:
-0005   3008           00023     movlw       .8          ; Numero de LEDs o rotaciones que vamos a utilizar
-0006   00A0           00024     movwf       conta       ; Asignamos los LEDs a la variable conta
-0007   3001           00025     movlw       b'00000001' ; Configuramos todo el PORTB
-0008   0086           00026     movwf       PORTB       ; Guardamos en PORTB
-                      00027     
-0009                  00028 bucle_principal:
-0009   30FA           00029     movlw       .250        ; Asignamos los milisegundos
-000A   2???           00030     call        delay_ms    ; Llamamos a nuestra rutina de retardo
-000B   0BA0           00031     decfsz      conta, 1    ; Decrementamos en 1 el contador, esto son los LEDs, y cuando de cero se sal
+0003   0081           00017     movwf       OPTION_REG  ; Guardamos la configuracion en TMR0
+0004   1283           00018     bcf         STATUS, 5   ; Regresamos al banco 0
+                      00019  
+                      00020 ; Creamos la rutina de inicio de los LEDs
+0005                  00021 inicio:
+0005   3008           00022     movlw       .8          ; Numero de LEDs o rotaciones que vamos a utilizar
+0006   00A0           00023     movwf       conta       ; Asignamos los LEDs a la variable conta
+0007   3001           00024     movlw       b'00000001' ; Configuramos todo el PORTB
+0008   0086           00025     movwf       PORTB       ; Guardamos en PORTB
+                      00026     
+0009                  00027 bucle_principal:
+0009   30FA           00028     movlw       .250        ; Asignamos los milisegundos
+000A   2???           00029     call        delay_ms    ; Llamamos a nuestra rutina de retardo
+000B   0BA0           00030     decfsz      conta, 1    ; Decrementamos en 1 el contador, esto son los LEDs, y cuando de cero se sal
                             ta la instruccion de goto $+2
-000C   2???           00032     goto        $+2         ; Saltamos a la siguientes dos instrucciones
-000D   2???           00033     goto        inicio      ; Cuando decfsz es 0 saltamos a esta instruccion
-000E   1403           00034     bsf         STATUS, 0   ; Con este bit, decimos si el LED se va a quedar encendido(bsf) o apagado(bc
+000C   2???           00031     goto        $+2         ; Saltamos a la siguientes dos instrucciones
+000D   2???           00032     goto        inicio      ; Cuando decfsz es 0 saltamos a esta instruccion
+000E   1403           00033     bsf         STATUS, 0   ; Con este bit, decimos si el LED se va a quedar encendido(bsf) o apagado(bc
                             f)
-000F   0D86           00035     rlf         PORTB, 1    ; Rotamos los bits a la izquierda
-0010   2???           00036     goto        bucle_principal
-                      00037 
-                      00038 ; Parte de la función para que el bucle del milisegundo se ejecute 100 veces
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  2
+000F   0D86           00034     rlf         PORTB, 1    ; Rotamos los bits a la izquierda
+0010   2???           00035     goto        bucle_principal
+                      00036 
+                      00037 #include <delay.inc>
+                      00001 ; VARIABLES
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:42:54         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00039 ; Retardo en milisegundos
-0011                  00040 delay_ms:
-0011   00A1           00041     movwf       temp1       ; Guardamos el valor actual en temp1
-0012                  00042 delay_ms_loop:
-0012   2???           00043     call        delay_1ms   ; Llamamos a la rutina de 1 ms
-0013   0BA1           00044     decfsz      temp1, 1    ; Decrementamos temp1; si es 0, salimos del bucle
-0014   2???           00045     goto        delay_ms_loop
-0015   0008           00046     return
-                      00047 
-                      00048 ; Retardo de 1 ms usando TMR0
-0016                  00049 delay_1ms:
-0016   0181           00050     clrf        TMR0        ; Inicializamos TMR0
-0017                  00051 delay_1ms_wait:
-0017   1D01           00052     btfss       TMR0, 2     ; Esperamos hasta que el bit 2 de TMR0 se active
-0018   2???           00053     goto        delay_1ms_wait
-0019   0008           00054     return
-                      00055     
-3F10                  00056     end
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  3
+                      00002  cblock 0x30
+  00000030            00003     temp1
+                      00004  endc
+                      00005 
+                      00006 ; Retardo en milisegundos
+0011                  00007 delay_ms:
+0011   00B0           00008     movwf       temp1       ; Guardamos el valor actual en temp1
+0012                  00009 delay_ms_loop:
+0012   2???           00010     call        delay_1ms   ; Llamamos a la rutina de 1 ms
+0013   0BB0           00011     decfsz      temp1, 1    ; Decrementamos temp1; si es 0, salimos del bucle
+0014   2???           00012     goto        delay_ms_loop
+0015   0008           00013     return
+                      00014 
+                      00015 ; Retardo de 1 ms usando TMR0
+0016                  00016 delay_1ms:
+0016   0181           00017     clrf        TMR0        ; Inicializamos TMR0
+0017                  00018 delay_1ms_wait:
+0017   1D01           00019     btfss       TMR0, 2     ; Esperamos hasta que el bit 2 de TMR0 se active
+0018   2???           00020     goto        delay_1ms_wait
+0019   0008           00021     return
+                      00038     
+3F10                  00039     end
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:42:54         PAGE  3
 
 
 SYMBOL TABLE
@@ -140,7 +144,7 @@ NOT_BOD                           00000000
 NOT_BOR                           00000000
 NOT_PD                            00000003
 NOT_POR                           00000001
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  4
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:42:54         PAGE  4
 
 
 SYMBOL TABLE
@@ -199,7 +203,7 @@ STATUS                            00000003
 SYNC                              00000004
 T0CS                              00000005
 T0IE                              00000005
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  5
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:42:54         PAGE  5
 
 
 SYMBOL TABLE
@@ -258,7 +262,7 @@ TXIE                              00000004
 TXIF                              00000004
 TXREG                             00000019
 TXSTA                             00000098
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  6
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:42:54         PAGE  6
 
 
 SYMBOL TABLE
@@ -317,7 +321,7 @@ _PWRTE_OFF                        00003FFF
 _PWRTE_ON                         00003FF7
 _RC_OSC_CLKOUT                    00003FFF
 _RC_OSC_NOCLKOUT                  00003FFE
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  7
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:42:54         PAGE  7
 
 
 SYMBOL TABLE
@@ -336,7 +340,7 @@ delay_1ms_wait                    00000017
 delay_ms                          00000011
 delay_ms_loop                     00000012
 inicio                            00000005
-temp1                             00000021
+temp1                             00000030
 
 Errors   :     0
 Warnings :     0 reported,     0 suppressed
