@@ -49,7 +49,7 @@ movwf temp1
 El valor de WREG (el número de milisegundos a retardar) se guarda en temp1.
 Bucle de Retardo:
 
-``asm
+```asm
 delay_ms_loop:
     call delay_1ms
     decfsz temp1, 1
@@ -69,29 +69,29 @@ return
 
 Esta subrutina genera un retardo exacto de 1 ms utilizando el temporizador TMR0.
 
-	1. Inicializar TMR0:
+**Inicializar TMR0:**
 
-	```asm
-	clrf TMR0
-	```
+```asm
+clrf TMR0
+```
 
-	* Borra el contenido de TMR0 para iniciar el conteo desde 0.
+* Borra el contenido de TMR0 para iniciar el conteo desde 0.
 
-	Esperar que TMR0 alcance un valor específico:
+**Esperar que TMR0 alcance un valor específico:**
 
-	```asm
-	delay_1ms_wait:
-	    btfss TMR0, 2
-	    goto delay_1ms_wait
-	```
+```asm
+delay_1ms_wait:
+    btfss TMR0, 2
+    goto delay_1ms_wait
+```
 
-	* Verifica continuamente el bit 2 de TMR0. Este bit se activa automáticamente cuando el temporizador alcanza un valor predefinido.
+* Verifica continuamente el bit 2 de TMR0. Este bit se activa automáticamente cuando el temporizador alcanza un valor predefinido.
 
-	3. Finalizar la rutina:
+3. **Finalizar la rutina:**
 
-	```asm
-	return
-	```
+```asm
+return
+```
 	
 ---
 	
