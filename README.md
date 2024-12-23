@@ -41,55 +41,62 @@ delay_1ms_wait:
 
 Esta rutina genera un retardo de varios milisegundos según el valor almacenado en WREG al momento de la llamada.
 
-1. Guardar el valor en temp1:
+	1. Guardar el valor en temp1:
 
-```asm
-movwf temp1
-```
-2. El valor de WREG (el número de milisegundos a retardar) se guarda en temp1.
-Bucle de Retardo:
+	```asm
+	movwf temp1
+	```
+	2. El valor de WREG (el número de milisegundos a retardar) se guarda en temp1.
+	Bucle de Retardo:
 
-``asm
+	``asm
+	delay_ms_loop:
+	    call delay_1ms
+	    decfsz temp1, 1
+	    goto delay_ms_loop
+	```
 
-delay_ms_loop:
-    call delay_1ms
-    decfsz temp1, 1
-    goto delay_ms_loop
-    
-```
-* Cada iteración llama a delay_1ms para un retardo de 1 ms.
-* El registro temp1 se decrementa. Cuando llega a 0, el bucle termina.
+	* Cada iteración llama a delay_1ms para un retardo de 1 ms.
+	* El registro temp1 se decrementa. Cuando llega a 0, el bucle termina.
 
-3. Finalizar la rutina:
+	3. Finalizar la rutina:
 
-```asm
+	```asm
+	return
+	```
 
-return
-```
+2. **delay_1ms - Retardo de 1 Milisegundo**
 
-**delay_1ms - Retardo de 1 Milisegundo**
 Esta subrutina genera un retardo exacto de 1 ms utilizando el temporizador TMR0.
 
-Inicializar TMR0:
+	1. Inicializar TMR0:
 
-asm
-Copiar código
-clrf TMR0
-Borra el contenido de TMR0 para iniciar el conteo desde 0.
-Esperar que TMR0 alcance un valor específico:
+	```asm
+	clrf TMR0
+	```
 
-asm
-Copiar código
-delay_1ms_wait:
-    btfss TMR0, 2
-    goto delay_1ms_wait
-Verifica continuamente el bit 2 de TMR0. Este bit se activa automáticamente cuando el temporizador alcanza un valor predefinido.
-Finalizar la rutina:
+	* Borra el contenido de TMR0 para iniciar el conteo desde 0.
 
-asm
-Copiar código
-return
-Notas
+	Esperar que TMR0 alcance un valor específico:
+
+	```asm
+	delay_1ms_wait:
+	    btfss TMR0, 2
+	    goto delay_1ms_wait
+	```
+
+	* Verifica continuamente el bit 2 de TMR0. Este bit se activa automáticamente cuando el temporizador alcanza un valor predefinido.
+
+	3. Finalizar la rutina:
+
+	```asm
+	return
+	```
+	
+---
+	
+## Notas
+
 Configuración de TMR0:
 
 Asegúrate de configurar el prescaler y la fuente del reloj correctamente en OPTION_REG para que el temporizador TMR0 funcione de acuerdo con la frecuencia del reloj del microcontrolador.
@@ -99,4 +106,6 @@ La duración del retardo depende de la frecuencia del reloj del microcontrolador
 Registros Temporales:
 
 Asegúrate de que temp1 no se use para otras operaciones mientras la rutina esté en ejecución.
+
+----
 
