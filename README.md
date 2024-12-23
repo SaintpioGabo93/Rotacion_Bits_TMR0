@@ -41,29 +41,29 @@ delay_1ms_wait:
 
 Esta rutina genera un retardo de varios milisegundos según el valor almacenado en WREG al momento de la llamada.
 
-	1. Guardar el valor en temp1:
+**Guardar el valor en temp1:**
 
-	```asm
-	movwf temp1
-	```
-	2. El valor de WREG (el número de milisegundos a retardar) se guarda en temp1.
-	Bucle de Retardo:
+```asm
+movwf temp1
+```
+El valor de WREG (el número de milisegundos a retardar) se guarda en temp1.
+Bucle de Retardo:
 
-	``asm
-	delay_ms_loop:
-	    call delay_1ms
-	    decfsz temp1, 1
-	    goto delay_ms_loop
-	```
+``asm
+delay_ms_loop:
+    call delay_1ms
+    decfsz temp1, 1
+    goto delay_ms_loop
+```
 
-	* Cada iteración llama a delay_1ms para un retardo de 1 ms.
-	* El registro temp1 se decrementa. Cuando llega a 0, el bucle termina.
+* Cada iteración llama a delay_1ms para un retardo de 1 ms.
+* El registro temp1 se decrementa. Cuando llega a 0, el bucle termina.
 
-	3. Finalizar la rutina:
+**Finalizar la rutina:**
 
-	```asm
-	return
-	```
+```asm
+return
+```
 
 2. **delay_1ms - Retardo de 1 Milisegundo**
 
