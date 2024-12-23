@@ -1,0 +1,345 @@
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ; CONFIGURACIÓN
+2007   3F10           00002  __CONFIG _INTRC_OSC_NOCLKOUT & _WDTE_OFF & _PWRTE_ON & _MCLRE_OFF & _BOREN_OFF & _LVP_OFF & _CPD_OFF & 
+                            _CP_OFF
+                      00003 
+                      00004     LIST P=16F628A
+                      00005     #include <p16f628a.inc>
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Mar 17 2019
+                      00005 ;  MPASM PIC16F628A processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2019 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      00386         LIST
+                      00006     
+                      00007 ; Variables
+                      00008     cblock 0x20
+  00000020            00009         conta       ; Contador de LEDs
+  00000021            00010         temp1
+                      00011     endc
+                      00012     
+                      00013 ; Inicio de programa
+                      00014     org         0x00        ; iniciamos el programa en la dirección cero
+0000   1683           00015     bsf         STATUS, 5   ; Vamos al banco 1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0001   0186           00016     clrf        TRISB       ; Configuramos PORTB como salida
+0002   3007           00017     movlw       b'00000111' ; Configuramos OPTION_REG para prescaler 1:256
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0003   0081           00018     movwf       OPTION_REG  ; Guardamos la configuracion en TMR0
+0004   1283           00019     bcf         STATUS, 5   ; Regresamos al banco 0
+                      00020  
+                      00021 ; Creamos la rutina de inicio de los LEDs
+0005                  00022 inicio:
+0005   3008           00023     movlw       .8          ; Numero de LEDs o rotaciones que vamos a utilizar
+0006   00A0           00024     movwf       conta       ; Asignamos los LEDs a la variable conta
+0007   3001           00025     movlw       b'00000001' ; Configuramos todo el PORTB
+0008   0086           00026     movwf       PORTB       ; Guardamos en PORTB
+                      00027     
+0009                  00028 bucle_principal:
+0009   30FA           00029     movlw       .250        ; Asignamos los milisegundos
+000A   2???           00030     call        delay_ms    ; Llamamos a nuestra rutina de retardo
+000B   0BA0           00031     decfsz      conta, 1    ; Decrementamos en 1 el contador, esto son los LEDs, y cuando de cero se sal
+                            ta la instruccion de goto $+2
+000C   2???           00032     goto        $+2         ; Saltamos a la siguientes dos instrucciones
+000D   2???           00033     goto        inicio      ; Cuando decfsz es 0 saltamos a esta instruccion
+000E   1403           00034     bsf         STATUS, 0   ; Con este bit, decimos si el LED se va a quedar encendido(bsf) o apagado(bc
+                            f)
+000F   0D86           00035     rlf         PORTB, 1    ; Rotamos los bits a la izquierda
+0010   2???           00036     goto        bucle_principal
+                      00037 
+                      00038 ; Parte de la función para que el bucle del milisegundo se ejecute 100 veces
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00039 ; Retardo en milisegundos
+0011                  00040 delay_ms:
+0011   00A1           00041     movwf       temp1       ; Guardamos el valor actual en temp1
+0012                  00042 delay_ms_loop:
+0012   2???           00043     call        delay_1ms   ; Llamamos a la rutina de 1 ms
+0013   0BA1           00044     decfsz      temp1, 1    ; Decrementamos temp1; si es 0, salimos del bucle
+0014   2???           00045     goto        delay_ms_loop
+0015   0008           00046     return
+                      00047 
+                      00048 ; Retardo de 1 ms usando TMR0
+0016                  00049 delay_1ms:
+0016   0181           00050     clrf        TMR0        ; Inicializamos TMR0
+0017                  00051 delay_1ms_wait:
+0017   1D01           00052     btfss       TMR0, 2     ; Esperamos hasta que el bit 2 de TMR0 se active
+0018   2???           00053     goto        delay_1ms_wait
+0019   0008           00054     return
+                      00055     
+3F10                  00056     end
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ADDEN                             00000003
+ADEN                              00000003
+BRGH                              00000002
+C                                 00000000
+C1INV                             00000004
+C1OUT                             00000006
+C2INV                             00000005
+C2OUT                             00000007
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCPR1                             00000015
+CCPR1H                            00000016
+CCPR1L                            00000015
+CIS                               00000003
+CM0                               00000000
+CM1                               00000001
+CM2                               00000002
+CMCON                             0000001F
+CMIE                              00000006
+CMIF                              00000006
+CREN                              00000004
+CSRC                              00000007
+DATA_CP_OFF                       00003FFF
+DATA_CP_ON                        00003EFF
+DC                                00000001
+EEADR                             0000009B
+EECON1                            0000009C
+EECON2                            0000009D
+EEDATA                            0000009A
+EEIE                              00000007
+EEIF                              00000007
+F                                 00000001
+FERR                              00000002
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+NOT_BO                            00000000
+NOT_BOD                           00000000
+NOT_BOR                           00000000
+NOT_PD                            00000003
+NOT_POR                           00000001
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+NOT_RBPU                          00000007
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+OERR                              00000001
+OPTION_REG                        00000081
+OSCF                              00000003
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PEIE                              00000006
+PIE1                              0000008C
+PIR1                              0000000C
+PORTA                             00000005
+PORTB                             00000006
+PR2                               00000092
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RA6                               00000006
+RA7                               00000007
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+RP0                               00000005
+RP1                               00000006
+RX9                               00000006
+RX9D                              00000000
+SPBRG                             00000099
+SPEN                              00000007
+SREN                              00000005
+STATUS                            00000003
+SYNC                              00000004
+T0CS                              00000005
+T0IE                              00000005
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000010
+T1OSCEN                           00000003
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000012
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR1                              0000000E
+TMR1CS                            00000001
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA5                            00000005
+TRISA6                            00000006
+TRISA7                            00000007
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+TRMT                              00000001
+TX9                               00000006
+TX9D                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             00000019
+TXSTA                             00000098
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+VR0                               00000000
+VR1                               00000001
+VR2                               00000002
+VR3                               00000003
+VRCON                             0000009F
+VREN                              00000007
+VROE                              00000006
+VRR                               00000005
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_.org_0_000C                      0000000C
+_BODEN_OFF                        00003FBF
+_BODEN_ON                         00003FFF
+_BOREN_OFF                        00003FBF
+_BOREN_ON                         00003FFF
+_CONFIG                           00002007
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
+_CP_OFF                           00003FFF
+_CP_ON                            00001FFF
+_DEVID1                           00002006
+_ER_OSC_CLKOUT                    00003FFF
+_ER_OSC_NOCLKOUT                  00003FFE
+_EXTCLK_OSC                       00003FEF
+_FOSC_ECIO                        00003FEF
+_FOSC_EXTRCCLK                    00003FFF
+_FOSC_EXTRCIO                     00003FFE
+_FOSC_HS                          00003FEE
+_FOSC_INTOSCCLK                   00003FFD
+_FOSC_INTOSCIO                    00003FFC
+_FOSC_LP                          00003FEC
+_FOSC_XT                          00003FED
+_HS_OSC                           00003FEE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_INTOSC_OSC_CLKOUT                00003FFD
+_INTOSC_OSC_NOCLKOUT              00003FFC
+_INTRC_OSC_CLKOUT                 00003FFD
+_INTRC_OSC_NOCLKOUT               00003FFC
+_LP_OSC                           00003FEC
+_LVP_OFF                          00003F7F
+_LVP_ON                           00003FFF
+_MCLRE_OFF                        00003FDF
+_MCLRE_ON                         00003FFF
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC_CLKOUT                    00003FFF
+_RC_OSC_NOCLKOUT                  00003FFE
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FED
+__16F628A                         00000001
+bucle_principal                   00000009
+conta                             00000020
+delay_1ms                         00000016
+delay_1ms_wait                    00000017
+delay_ms                          00000011
+delay_ms_loop                     00000012
+inicio                            00000005
+temp1                             00000021
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     2 reported,     0 suppressed
+
+
