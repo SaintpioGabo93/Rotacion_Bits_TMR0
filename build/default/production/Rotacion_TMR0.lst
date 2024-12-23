@@ -1,4 +1,4 @@
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  1
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -57,7 +57,7 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
 0010   2???           00036     goto        bucle_principal
                       00037 
                       00038 ; Parte de la función para que el bucle del milisegundo se ejecute 100 veces
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  2
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -81,7 +81,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0019   0008           00054     return
                       00055     
 3F10                  00056     end
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  3
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  3
 
 
 SYMBOL TABLE
@@ -140,7 +140,7 @@ NOT_BOD                           00000000
 NOT_BOR                           00000000
 NOT_PD                            00000003
 NOT_POR                           00000001
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  4
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  4
 
 
 SYMBOL TABLE
@@ -199,7 +199,7 @@ STATUS                            00000003
 SYNC                              00000004
 T0CS                              00000005
 T0IE                              00000005
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  5
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  5
 
 
 SYMBOL TABLE
@@ -258,7 +258,7 @@ TXIE                              00000004
 TXIF                              00000004
 TXREG                             00000019
 TXSTA                             00000098
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  6
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  6
 
 
 SYMBOL TABLE
@@ -317,7 +317,7 @@ _PWRTE_OFF                        00003FFF
 _PWRTE_ON                         00003FF7
 _RC_OSC_CLKOUT                    00003FFF
 _RC_OSC_NOCLKOUT                  00003FFE
-MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  21:51:40         PAGE  7
+MPASM 5.84  /HOME/GABO/MPLABXPROJECTS/TMR_RO   12-22-2024  22:35:10         PAGE  7
 
 
 SYMBOL TABLE
